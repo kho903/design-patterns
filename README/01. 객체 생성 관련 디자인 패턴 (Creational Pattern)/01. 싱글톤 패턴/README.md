@@ -140,3 +140,56 @@ public class Settings {
 ```
 1. 이 방법은 static final 을 썼는데도 왜 지연 초기화 (lazy initialization)이라고 볼 수 있는가?
 - inner class 내에 static final 로 해당 변수는 getInstance() 메서드가 호출될 때 로딩되기 때문에 지연 초기화로 볼 수 있다.
+
+## 싱글톤 (Singleton) 패턴 구현 깨트리기
+### 리플렉션 사용
+```java
+public class App {
+	public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+		// 리플렉션 사용하기
+		Settings settings = Settings.getInstance();
+		Constructor<Settings> constructor = Settings.class.getDeclaredConstructor();
+		constructor.setAccessible(true);
+		Settings settings1 = constructor.newInstance();
+
+		System.out.println(settings == settings1); // false
+	}
+}
+```
+1. 리플렉션이란?
+    - 구체적인 클래스 타입을 알지 못해도, 그 클래스의 메소드, 타입, 변수들에 접근할 수 있도록 해주는 자바 API
+2. setAccessible(true)를 사용하는 이유는?
+    - 예제에서 기본 생성자가 private으로 외부에서 호출할 수 없다.
+    - but, setAccessible(true)를 통해 privat으로 만든 기본 생성자에 접근할 수 있다.
+
+### 직렬화 & 역직렬화 사용
+```java
+public class App {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		// 직렬화, 역직렬화
+		Settings settings = Settings.getInstance();
+		Settings settings1 = null;
+		try (ObjectOutput out = new ObjectOutputStream(new FileOutputStream("settings.obj"))) {
+			out.writeObject(settings);
+		}
+
+		try (ObjectInput in = new ObjectInputStream(new FileInputStream("settings.obj"))) {
+			settings1 = (Settings)in.readObject();
+		}
+
+		System.out.println(settings == settings1); // false
+	}
+}
+```
+1. 자바의 직렬화 & 역직렬화에 대해 설명하시오.
+   1. 직렬화 (Serialize)
+      - 자바 내의 Object 또는 Data를 외부에서 사용할 수 있도록 byte 형태로 데이터를 변환하는 기술이다.
+   2. 역질렬화 (Deserialize)
+      - byte 형태로 변환된 Data를 다시 자바 내의 Object 또는 Data 변환하는 기술
+2. SerializableId란 무엇이며 왜 쓰는가?
+    - Serializable 상속 클래스에서 versioning 용도로 serialVersionUID 사용
+    - 파일 등으로 저장을 할 때 해당하는 클래스의 버전이 맞는 지 확인하는 중요한 장치
+    - 작성하지 않으면 JVM에서 자동으로 작성을 하고, 버전마다 다르기 때문에 직접 설정하는 것을 권장
+3. try-resource 블럭에 대한 설명
+    - try-with-resources는 try에 자원 객체를 전달하면, try 코드 블록이 끝나면 자동으로 자원을 종료해주는 기능
+    - 따로 finally나 catch가 필요 X
