@@ -231,3 +231,28 @@ public class Settings {
    }
 }
 ```
+
+## 실무에서는 어떻게 쓰일까?
+- 스프링에서 빈의 스코프 중에 하나로 싱글톤 스코프
+```java
+public class SpringExample {
+	public static void main(String[] args) {
+		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
+		String hello = applicationContext.getBean("hello", String.class);
+		String hello2 = applicationContext.getBean("hello", String.class);
+		System.out.println(hello == hello2);
+	}
+}
+```
+- 자바 java.lang.Runtime
+```java
+
+public class RuntimeExample {
+	public static void main(String[] args) {
+		Runtime runtime = Runtime.getRuntime();
+		System.out.println(runtime.maxMemory());
+		System.out.println(runtime.freeMemory());
+	}
+}
+```
+- 다른 디자인 패턴 (빌더, 퍼사드, 추상 팩토리 등) 구현체의 일부로 쓰이기도 한다.
