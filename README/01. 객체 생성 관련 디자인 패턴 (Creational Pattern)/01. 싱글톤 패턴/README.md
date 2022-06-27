@@ -193,3 +193,41 @@ public class App {
 3. try-resource 블럭에 대한 설명
     - try-with-resources는 try에 자원 객체를 전달하면, try 코드 블록이 끝나면 자동으로 자원을 종료해주는 기능
     - 따로 finally나 catch가 필요 X
+
+## 안전하고 단순하게 구현하는 방법
+### V6
+- enum을 사용하는 방법
+```java
+public enum Settings {
+	INSTANCE;
+}
+```
+1. enum 타입의 인스턴스를 리플렉션을 통해 만들 수 있는가?
+   - 리플렉션을 통해 만들 수 없도록 막혀있다.
+2. enum으로 싱글톤 타입을 구현할 때의 단점은?
+   - 미리 인스턴스가 만들어진다. (eager initialization), (자원낭비가 크지 않다면 가장 안전한 방법)
+   - 상속이 불가능하다.
+3. 직렬화 & 역직렬화 시에 별도로 구현해야 하는 메소드가 있는가?
+   - enum 클래스 자체에서 Serializable을 이미 구현하고 있기 때문에 별도로 구현이 필요없다.
+
+## 정리
+1. 자바에서 enum을 사용하지 않고 싱글톤 패턴을 구현하는 방법은?
+   - 
+2. private 생성자와 static 메소드를 사용하는 방법의 단점은?
+   - 멀티 쓰레드에 안전하지 않다. (thread-safe X)
+3. enum을 사용해 싱글톤 패턴을 구현하는 방법의 장점과 단점은?
+   - 장점 : reflection, 직렬화 역질렬화에 안전하다.
+   - 단점 : 미리 인스턴스가 만들어지고, 상속이 불가능하다.
+4. static 클래스를 사용해 싱글톤 패턴 구현 방법
+```java
+public class Settings {
+
+   private static class SettingsHolder {
+      private static final Settings INSTANCE = new Settings();
+   }
+
+   public Settings getInstance() {
+      return SettingsHolder.INSTANCE;
+   }
+}
+```
