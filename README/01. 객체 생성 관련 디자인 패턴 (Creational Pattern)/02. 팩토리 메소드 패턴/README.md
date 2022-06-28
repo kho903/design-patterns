@@ -56,3 +56,53 @@ public abstract class DefaultShipFactory implements ShipFactory {
       활용한다.
     - 더 나아가 자바 9부터 interface에 private 메소드를 정의할 수 있다. default나 static
       메서드 내에서만 사용가능
+
+## 실무에서는 어떻게 쓰일까?
+- 단순한 팩토리 패턴
+  - 매개변수의 값에 따라 또는 메소드에 따라 각기 다른 인스턴스를 리턴하는 단순한 버전의 팩토리 패턴
+```java
+public class SimpleFactory {
+	public Object createProduct(String name) {
+		if (name.equals("whiteship")) {
+			return new WhiteShip();
+		} else if (name.equals("blackship")) {
+			return new BlackShip();
+		}
+
+		throw new IllegalArgumentException();
+	}
+}
+```
+  - java.lang.Calendar 또는 java.lang.NumberFormat
+```java
+
+public class CalendarExample {
+	public static void main(String[] args) {
+		System.out.println(Calendar.getInstance().getClass());
+		System.out.println(Calendar.getInstance(Locale.forLanguageTag("th-TH-x-lvariant-TH")).getClass());
+		System.out.println(Calendar.getInstance(Locale.forLanguageTag("ja-JP-x-lvariant-JP")).getClass());
+	}
+   
+	/* 출력결과
+            class java.util.GregorianCalendar
+            class sun.util.BuddhistCalendar
+            class java.util.JapaneseImperialCalendar
+	 */
+}
+``` 
+- 스프링 BeanFactory
+  - Object 타입의 Product를 만드는 BeanFactory 라는 Creator
+```java
+public class SpringBeanFactoryExample {
+
+	public static void main(String[] args) {
+		BeanFactory xmlFactory = new ClassPathXmlApplicationContext("config.xml");
+		String hello = xmlFactory.getBean("hello", String.class);
+		System.out.println(hello);
+
+		BeanFactory javaFactory = new AnnotationConfigApplicationContext(Config.class);
+		String hi = javaFactory.getBean("hello", String.class);
+		System.out.println(hi);
+	}
+}
+```
