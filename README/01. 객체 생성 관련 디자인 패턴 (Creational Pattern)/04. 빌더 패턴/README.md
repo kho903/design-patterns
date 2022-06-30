@@ -316,3 +316,15 @@ public class App {
 - 원하는 객체를 만들려면 빌더부터 만들어야 한다.
 - 구조가 복잡해 진다. (트레이드 오프)
 
+## 실무에서 어떻게 쓰일까?
+- 자바 8 Stram.Builder API
+- StringBuilder는 빌더 패턴일까?
+  - StringBuilder 는 빌더 패턴과 유사하지만 GoF에서 말하는 빌더 패턴과는 차이가 있다.
+  - 100% 일치한다고 볼 수는 없지만 빌더 패턴이라고 본다.
+  - https://softwareengineering.stackexchange.com/questions/305504/is-stringbuilder-an-application-of-the-builder-design-pattern
+- 롬복의 @Builder
+  - https://projectlombok.org/features/Builder
+- 스프링
+  - UriComponentsBuilder
+  - MockMvcWebClientBuilder
+  - ...Builder
