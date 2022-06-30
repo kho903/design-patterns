@@ -30,3 +30,138 @@ public class WhiteShipFactory extends DefaultShipFactory {
 }
 ```
 - WhiteWheel, WhiteAnchor 구체적인 클래스 사용
+
+## 구현 방법
+- 확장에 열려 있고 변경에 닫혀 있는 구조
+- Anchor, Wheel interface
+```java
+public interface Anchor {
+}
+```
+```java
+public interface Wheel {
+}
+```
+- Ship에서 Anchor와 Wheel 추상클래스에 의존하도록 변경
+```java
+package com.jikim.designpatterns._01_creational_patterns._03_abstract_factory.after;
+
+public class Ship {
+	// ...
+
+	private Wheel wheel;
+
+	private Anchor anchor;
+	
+	// ...
+  
+	public void setWheel(Wheel wheel) {
+		this.wheel = wheel;
+	}
+
+	public void setAnchor(Anchor anchor) {
+		this.anchor = anchor;
+	}
+
+	// ...
+}
+
+``` 
+- WhiteWheel, WhiteAnchor (구체 클래스)
+```java
+public class WhiteWheel implements Wheel {
+}
+```
+```java
+public class WhiteAnchor implements Anchor {
+}
+```
+- ShipPartsFactory 생성 (추상 팩토리)
+```java
+public interface ShipPartsFactory {
+	Anchor createAnchor();
+	Wheel createWheel();
+}
+```
+- WhiteShipPartsFactory에서 ShipPartsFactory 상속 받아 구현
+  - 일련의 규약을 지키는 제품을 만들어 주는 팩토리
+```java
+public class WhiteShipPartsFactory implements ShipPartsFactory {
+	@Override
+	public Anchor createAnchor() {
+		return new WhiteAnchor();
+	}
+
+	@Override
+	public Wheel createWheel() {
+		return new WhiteWheel();
+	}
+}
+```
+- WhiteShipFactory - 클라이언트
+```java
+public class WhiteShipFactory extends DefaultShipFactory {
+
+	private ShipPartsFactory shipPartsFactory;
+
+	public WhiteShipFactory(ShipPartsFactory shipPartsFactory) {
+		this.shipPartsFactory = shipPartsFactory;
+	}
+
+	@Override
+	public Ship createShip() {
+		Ship ship = new WhiteShip();
+		ship.setAnchor(shipPartsFactory.createAnchor());
+		ship.setWheel(shipPartsFactory.createWheel());
+		return ship;
+	}
+}
+```
+- 여기서 Pro인 부품을 추가 하려한다.
+- WhiteAnchorPro, WhiteWheelPro, WhitePartsProFactory 추가
+```java
+public class WhiteAnchorPro implements Anchor {
+}
+```
+```java
+public class WhiteWheelPro implements Wheel {
+}
+```
+```java
+public class WhitePartsProFactory implements ShipPartsFactory {
+	@Override
+	public Anchor createAnchor() {
+		return new WhiteAnchorPro();
+	}
+
+	@Override
+	public Wheel createWheel() {
+		return new WhiteWheelPro();
+	}
+}
+```
+- ShipInventory : 실행 코드
+```java
+public class ShipInventory {
+	public static void main(String[] args) {
+		ShipFactory shipFactory = new WhiteShipFactory(new WhiteShipPartsFactory());
+		Ship ship = shipFactory.createShip();
+		System.out.println(ship.getAnchor().getClass());
+		System.out.println(ship.getWheel().getClass());
+		System.out.println();
+
+		ShipFactory shipProFactory = new WhiteShipFactory(new WhitePartsProFactory());
+		Ship shipPro = shipProFactory.createShip();
+		System.out.println(shipPro.getAnchor().getClass());
+		System.out.println(shipPro.getWheel().getClass());
+	}
+  /**
+   * 출력 결과
+   class com.jikim.designpatterns._01_creational_patterns._03_abstract_factory.after_v1.WhiteAnchor
+   class com.jikim.designpatterns._01_creational_patterns._03_abstract_factory.after_v1.WhiteWheel
+
+   class com.jikim.designpatterns._01_creational_patterns._03_abstract_factory.after_v1.WhiteAnchorPro
+   class com.jikim.designpatterns._01_creational_patterns._03_abstract_factory.after_v1.WhiteWheelPro
+   */
+}
+```
