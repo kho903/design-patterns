@@ -176,3 +176,11 @@ public class ShipInventory {
 - 목적이 조금 다르다.
   - 팩토리 메소드 패턴은 구체적인 객체 생성 과정을 하위 또는 구체적인 클래스로 옮기는 것이 목적
   - 추상 팩토리 패턴은 관련있는 여러 객체를 구체적인 클래스에 의존하지 않고 만들 수 있게 해주는 것이 목적.
+
+## 실무에서는 어떻게 쓰일까?
+- 자바 라이브러리
+  - javax.xml.xpath.XPathFactory#newInstance()
+  - javax.xml.transform.TransformerFactory#newInstance()
+  - javax.xml.parsers.DocumentBuilderFactory#newInstance()
+- 스프링
+  - FactoryBean과 그 구현체
