@@ -1,3 +1,239 @@
 # 프로토타입 (Prototype) 패턴
 기존 인스턴스를 복제하여 새로운 인스턴스를 만드는 방법
 - 복제 기능을 갖추고 있는 기존 인스턴스를 프로토타입으로 사용해 새 인스턴스를 만들 수 있다.
+
+## 적용 전
+GithubRepository
+```java
+
+public class GithubRepository {
+
+	private String user;
+
+	private String name;
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+}
+```
+GithubIssue
+```java
+package com.jikim.designpatterns._01_creational_patterns._05_prototype.before;
+
+public class GithubIssue {
+
+	private int id;
+
+	private String title;
+
+	private GithubRepository repository;
+
+	public GithubIssue(GithubRepository repository) {
+		this.repository = repository;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public GithubRepository getRepository() {
+		return repository;
+	}
+
+	public String getUrl() {
+		return String.format("https://www.github.com/%s/%s/issues/%d",
+			repository.getUser(),
+			repository.getName(),
+			this.getId()
+		);
+	}
+}
+```
+App
+```java
+package com.jikim.designpatterns._01_creational_patterns._05_prototype.before;
+
+public class App {
+	public static void main(String[] args) {
+		GithubRepository repository = new GithubRepository();
+		repository.setUser("whiteShip");
+		repository.setName("live-study");
+
+		GithubIssue githubIssue = new GithubIssue(repository);
+		githubIssue.setId(1);
+		githubIssue.setTitle("1주차 과제: JVM은 무엇이며 자바 코드는 어떻게 실행하는 것인가.");
+
+		String url = githubIssue.getUrl();
+		System.out.println(url);
+
+		GithubIssue githubIssue2 = new GithubIssue(repository);
+		githubIssue2.setId(2);
+		githubIssue2.setTitle("2주차 과제: ...");
+		
+	}
+}
+
+```
+
+## 적용 후
+GithubRepository
+```java
+public class GithubRepository {
+
+	private String user;
+
+	private String name;
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+}
+```
+```java
+import java.util.Objects;
+
+public class GithubIssue implements Cloneable {
+
+	private int id;
+
+	private String title;
+
+	private GithubRepository repository;
+
+	public GithubIssue(GithubRepository repository) {
+		this.repository = repository;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public GithubRepository getRepository() {
+		return repository;
+	}
+
+	public String getUrl() {
+		return String.format("https://www.github.com/%s/%s/issues/%d",
+			repository.getUser(),
+			repository.getName(),
+			this.getId()
+		);
+	}
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		// 얕은 복사
+		// return super.clone();
+
+		// 깊은 복사
+		GithubRepository repository = new GithubRepository();
+		repository.setUser(this.repository.getUser());
+		repository.setName(this.repository.getName());
+
+		GithubIssue githubIssue = new GithubIssue(repository);
+		githubIssue.setId(this.id);
+		githubIssue.setTitle(this.title);
+
+		return githubIssue;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		GithubIssue that = (GithubIssue)o;
+		return getId() == that.getId() && Objects.equals(getTitle(), that.getTitle()) && Objects.equals(
+			getRepository(), that.getRepository());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId(), getTitle(), getRepository());
+	}
+}
+```
+App
+```java
+package com.jikim.designpatterns._01_creational_patterns._05_prototype.after;
+
+public class App {
+	public static void main(String[] args) throws CloneNotSupportedException {
+		GithubRepository repository = new GithubRepository();
+		repository.setUser("whiteShip");
+		repository.setName("live-study");
+
+		GithubIssue githubIssue = new GithubIssue(repository);
+		githubIssue.setId(1);
+		githubIssue.setTitle("1주차 과제: JVM은 무엇이며 자바 코드는 어떻게 실행하는 것인가.");
+
+		String url = githubIssue.getUrl();
+		System.out.println(url);
+
+		GithubIssue clone = (GithubIssue)githubIssue.clone();
+		System.out.println(clone.getUrl());
+
+		// clone을 있는 그대로 overriding 하면 얕은 복사...
+		repository.setUser("Keesun");
+
+		System.out.println(clone != githubIssue);
+		System.out.println(clone.equals(githubIssue));
+		System.out.println(clone.getClass() == githubIssue.getClass());
+		System.out.println(clone.getRepository() == githubIssue.getRepository());
+
+		// super.clone 시 Keesun
+		// deep copy 시 whiteShip
+		System.out.println(clone.getUrl());
+	}
+}
+```
