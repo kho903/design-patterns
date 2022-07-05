@@ -206,3 +206,12 @@ public class App {
 
 ### 단점
 - 데코레이터를 조합하는 코드가 복잡할 수 있다.
+
+## 실무에서 어떻게 쓰이나?
+### 자바
+- InputStream, OutputStream, Reader, Writer의 생성자를 활용한 랩퍼
+- java.util.Collections가 제공하는 메소드들 활용한 랩퍼
+- javax.servlet.http.HttpServletRequest/ResponseWrapper
+
+### 스프링
+- ServerHttpRequestDecorator
