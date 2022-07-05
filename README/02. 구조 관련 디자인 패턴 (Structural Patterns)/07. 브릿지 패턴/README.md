@@ -226,3 +226,11 @@ public class App {
 
 ### 단점
 - 계층 구조가 늘어나 복잡도가 증가할 수 있다.
+
+## 실무에서 어떻게 쓰이나?
+### 자바
+- JDBC API, DriverManager와 Driver
+- SLF4J, 로깅 퍼사드와 로거
+
+### 스프링
+- Portable Service Abstraction
