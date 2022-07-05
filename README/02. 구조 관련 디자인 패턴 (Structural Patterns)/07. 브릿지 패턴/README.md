@@ -94,3 +94,123 @@ public class App {
 	}
 }
 ```
+
+## 적용 후
+Skin interface
+```java
+package com.jikim.designpatterns._02_structural_patterns._07_bridge.after;
+
+public interface Skin {
+	String getName();
+}
+```
+KDA
+```java
+package com.jikim.designpatterns._02_structural_patterns._07_bridge.after;
+
+public class KDA implements Skin {
+	@Override
+	public String getName() {
+		return "KDA";
+	}
+}
+
+```
+PoolParty
+```java
+package com.jikim.designpatterns._02_structural_patterns._07_bridge.after;
+
+public class PoolParty implements Skin {
+	@Override
+	public String getName() {
+		return "PoolParty";
+	}
+}
+```
+DefaultChampion
+```java
+package com.jikim.designpatterns._02_structural_patterns._07_bridge.after;
+
+import com.jikim.designpatterns._02_structural_patterns._07_bridge.before.Champion;
+
+public class DefaultChampion implements Champion {
+
+	private Skin skin;
+
+	private String name;
+
+	public DefaultChampion(Skin skin, String name) {
+		this.skin = skin;
+		this.name = name;
+	}
+
+	@Override
+	public void move() {
+		System.out.printf("%s %s move\n", skin.getName(), this.name);
+	}
+
+	@Override
+	public void skillQ() {
+		System.out.printf("%s %s Q\n", skin.getName(), this.name);
+	}
+
+	@Override
+	public void skillW() {
+		System.out.printf("%s %s W\n", skin.getName(), this.name);
+	}
+
+	@Override
+	public void skillE() {
+		System.out.printf("%s %s E\n", skin.getName(), this.name);
+	}
+
+	@Override
+	public void skillR() {
+		System.out.printf("%s %s R\n", skin.getName(), this.name);
+	}
+}
+```
+아리
+```java
+package com.jikim.designpatterns._02_structural_patterns._07_bridge.after;
+
+public class 아리 extends DefaultChampion {
+
+	public 아리(Skin skin) {
+		super(skin, "아리");
+	}
+}
+```
+아칼리
+```java
+package com.jikim.designpatterns._02_structural_patterns._07_bridge.after;
+
+public class 아칼리 extends DefaultChampion {
+
+	public 아칼리(Skin skin) {
+		super(skin, "아칼리");
+	}
+}
+```
+App - 클라이언트 코드
+```java
+package com.jikim.designpatterns._02_structural_patterns._07_bridge.after;
+
+import com.jikim.designpatterns._02_structural_patterns._07_bridge.before.Champion;
+
+public class App {
+	public static void main(String[] args) {
+		Champion kda아리 = new 아리(new KDA());
+		kda아리.skillQ();
+		kda아리.skillW();
+		kda아리.skillE();
+		kda아리.skillR();
+
+		Champion poolParty아리 = new 아리(new PoolParty());
+		poolParty아리.skillQ();
+		poolParty아리.skillW();
+		poolParty아리.skillE();
+		poolParty아리.skillR();
+	}
+}
+```
