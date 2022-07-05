@@ -71,3 +71,84 @@ public class Client {
 
 }
 ```
+
+## 적용 후
+Component 인터페이스
+```java
+package com.jikim.designpatterns._02_structural_patterns._08_composite.after;
+
+public interface Component {
+
+	int getPrice();
+}
+```
+Item
+```java
+package com.jikim.designpatterns._02_structural_patterns._08_composite.after;
+
+public class Item implements Component {
+	private String name;
+	private int price;
+
+	public Item(String name, int price) {
+		this.name = name;
+		this.price = price;
+	}
+
+	@Override
+	public int getPrice() {
+		return this.price;
+	}
+}
+```
+Bag
+```java
+package com.jikim.designpatterns._02_structural_patterns._08_composite.after;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Bag implements Component {
+
+	private List<Component> components = new ArrayList<>();
+
+	public void add(Component component) {
+		components.add(component);
+	}
+
+	public List<Component> getComponents() {
+		return components;
+	}
+
+	@Override
+	public int getPrice() {
+		return components.stream().mapToInt(Component::getPrice).sum();
+	}
+}
+```
+Client
+```java
+package com.jikim.designpatterns._02_structural_patterns._08_composite.after;
+
+public class Client {
+
+	public static void main(String[] args) {
+		Item doranBlade = new Item("도란검", 450);
+		Item healPotion = new Item("체력 물약", 50);
+
+		Bag bag = new Bag();
+		bag.add(doranBlade);
+		bag.add(healPotion);
+
+		Client client = new Client();
+		client.printPrice(doranBlade);
+		client.printPrice(bag);
+
+	}
+
+	private void printPrice(Component component) {
+		System.out.println(component.getPrice());
+	}
+}
+```
+- 클라이언트 코드에서 값을 계산하는 로직을 몰라도 된다.
