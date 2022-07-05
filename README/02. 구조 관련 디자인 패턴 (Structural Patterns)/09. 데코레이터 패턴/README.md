@@ -75,3 +75,126 @@ public class Client {
 	}
 }
 ```
+
+## 적용 후
+CommentService interface
+```java
+package com.jikim.designpatterns._02_structural_patterns._09_decorator.after;
+
+public interface CommentService {
+
+	void addComment(String comment);
+}
+```
+CommentDecorator
+```java
+package com.jikim.designpatterns._02_structural_patterns._09_decorator.after;
+
+public class CommentDecorator implements CommentService {
+
+	private CommentService commentService;
+
+	public CommentDecorator(CommentService commentService) {
+		this.commentService = commentService;
+	}
+
+	@Override
+	public void addComment(String comment) {
+		commentService.addComment(comment);
+	}
+}
+```
+DefaultCommentService
+```java
+package com.jikim.designpatterns._02_structural_patterns._09_decorator.after;
+
+public class DefaultCommentService implements CommentService {
+	@Override
+	public void addComment(String comment) {
+		System.out.println(comment);
+	}
+}
+```
+TrimmingCommentDecorator
+```java
+package com.jikim.designpatterns._02_structural_patterns._09_decorator.after;
+
+public class TrimmingCommentDecorator extends CommentDecorator {
+	public TrimmingCommentDecorator(CommentService commentService) {
+		super(commentService);
+	}
+
+	@Override
+	public void addComment(String comment) {
+		super.addComment(trim(comment));
+	}
+
+	private String trim(String comment) {
+		return comment.replace("...", "");
+	}
+}
+```
+SpamFilteringCommentDecorator
+```java
+package com.jikim.designpatterns._02_structural_patterns._09_decorator.after;
+
+public class SpamFilteringCommentDecorator extends CommentDecorator {
+	public SpamFilteringCommentDecorator(CommentService commentService) {
+		super(commentService);
+	}
+
+	@Override
+	public void addComment(String comment) {
+		if (!isSpam(comment))
+			super.addComment(comment);
+	}
+
+	private boolean isSpam(String comment) {
+		return comment.contains("http");
+	}
+}
+```
+Client
+```java
+package com.jikim.designpatterns._02_structural_patterns._09_decorator.after;
+
+public class Client {
+
+	private CommentService commentService;
+
+	public Client(CommentService commentService) {
+		this.commentService = commentService;
+	}
+
+	public void writeComment(String comment) {
+		commentService.addComment(comment);
+	}
+}
+```
+App
+```java
+package com.jikim.designpatterns._02_structural_patterns._09_decorator.after;
+
+public class App {
+
+	private static boolean enabledSpamFilter = true;
+
+	private static boolean enabledTrimming = true;
+
+	public static void main(String[] args) {
+		CommentService commentService = new DefaultCommentService();
+		if (enabledSpamFilter) {
+			commentService = new SpamFilteringCommentDecorator(commentService);
+		}
+
+		if (enabledTrimming) {
+			commentService = new TrimmingCommentDecorator(commentService);
+		}
+
+		Client client = new Client(commentService);
+		client.writeComment("오징어 게임");
+		client.writeComment("보는게 하는거 보다 재밌을 수가 없지...");
+		client.writeComment("http://whiteship.me");
+	}
+}
+```
