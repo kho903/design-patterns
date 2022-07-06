@@ -37,3 +37,85 @@ public class Client {
 	}
 }
 ```
+
+### 적용 후
+Font
+```java
+package com.jikim.designpatterns._02_structural_patterns._11_flyweight.after;
+
+public final class Font {
+
+	final String family;
+
+	final int size;
+
+	public Font(String family, int size) {
+		this.family = family;
+		this.size = size;
+	}
+
+	public String getFamily() {
+		return family;
+	}
+
+	public int getSize() {
+		return size;
+	}
+}
+```
+FontFactory
+```java
+package com.jikim.designpatterns._02_structural_patterns._11_flyweight.after;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class FontFactory {
+	private Map<String, Font> cache = new HashMap<>();
+
+	public Font getFont(String font) {
+		if (cache.containsKey(font)) {
+			return cache.get(font);
+		} else {
+			String[] split = font.split(":");
+			Font newFont = new Font(split[0], Integer.parseInt(split[1]));
+			cache.put(font, newFont);
+			return newFont;
+		}
+	}
+}
+```
+Character
+```java
+package com.jikim.designpatterns._02_structural_patterns._11_flyweight.after;
+
+public class Character {
+
+	private char value;
+
+	private String color;
+
+	private Font font;
+
+	public Character(char value, String color, Font font) {
+		this.value = value;
+		this.color = color;
+		this.font = font;
+	}
+}
+```
+Client
+```java
+package com.jikim.designpatterns._02_structural_patterns._11_flyweight.after;
+
+public class Client {
+	public static void main(String[] args) {
+		FontFactory fontFactory = new FontFactory();
+		Character c1 = new Character('h', "white", fontFactory.getFont("nanum:12"));
+		Character c2 = new Character('e', "white", fontFactory.getFont("nanum:12"));
+		Character c3 = new Character('l', "white", fontFactory.getFont("nanum:12"));
+		Character c4 = new Character('l', "white", fontFactory.getFont("nanum:12"));
+		Character c5 = new Character('o', "white", fontFactory.getFont("nanum:12"));
+	}
+}
+```
