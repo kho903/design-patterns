@@ -8,6 +8,7 @@ public class Client {
 		EmailMessage emailMessage = new EmailMessage();
 		emailMessage.setFrom("gmldnr2222@naver.com");
 		emailMessage.setTo("keesun@whiteship.me");
+		emailMessage.setCc("지훈");
 		emailMessage.setSubject("Test Mail from Java Program");
 		emailMessage.setText("Facade Pattern");
 		emailSender.sendEmail(emailMessage);

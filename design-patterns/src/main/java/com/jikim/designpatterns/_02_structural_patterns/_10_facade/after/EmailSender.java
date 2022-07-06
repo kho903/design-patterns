@@ -17,6 +17,10 @@ public class EmailSender {
 		this.emailSettings = emailSettings;
 	}
 
+	/**
+	 * 이메일 보내는 메소드
+	 * @param emailMessage
+	 */
 	public void sendEmail(EmailMessage emailMessage) {
 		Properties properties = System.getProperties();
 		properties.setProperty("mail.smtp.host", emailSettings.getHost());
@@ -27,6 +31,7 @@ public class EmailSender {
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(emailMessage.getFrom()));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(emailMessage.getTo()));
+			message.addRecipient(Message.RecipientType.CC, new InternetAddress(emailMessage.getCc()));
 			message.setSubject(emailMessage.getSubject());
 			message.setText(emailMessage.getText());
 
