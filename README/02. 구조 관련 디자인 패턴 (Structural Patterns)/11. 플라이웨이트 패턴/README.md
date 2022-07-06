@@ -126,3 +126,8 @@ public class Client {
 
 ### 단점
 - 코드의 복잡도가 증가한다.
+
+## 자바에서 찾아보는 패턴
+- Integer.valueOf(int)
+- 캐시를 제공한다.
+- https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#valueOf-int-
