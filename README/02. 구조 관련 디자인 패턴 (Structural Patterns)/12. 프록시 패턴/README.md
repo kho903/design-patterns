@@ -26,3 +26,96 @@ public class Client {
 	}
 }
 ```
+
+## 적용 후
+### V1
+GameService
+```java
+package com.jikim.designpatterns._02_structural_patterns._12_proxy.after_v1;
+
+public class GameService {
+
+	public void startGame() throws InterruptedException {
+		System.out.println("이 자리에 오신 여러분을 진심으로 환영합니다.");
+	}
+}
+```
+GameServiceProxy
+```java
+package com.jikim.designpatterns._02_structural_patterns._12_proxy.after_v1;
+
+public class GameServiceProxy extends GameService {
+
+	@Override
+	public void startGame() throws InterruptedException {
+		long before = System.currentTimeMillis();
+		super.startGame();
+		System.out.println(System.currentTimeMillis() - before);
+	}
+}
+```
+Client
+```java
+package com.jikim.designpatterns._02_structural_patterns._12_proxy.after_v1;
+
+
+public class Client {
+
+	public static void main(String[] args) throws InterruptedException {
+		GameService gameService = new GameServiceProxy();
+		gameService.startGame();
+	}
+}
+```
+
+### V2 - interface 적용
+GameService interface
+```java
+package com.jikim.designpatterns._02_structural_patterns._12_proxy.after_v2;
+
+public interface GameService {
+	void startGame();
+}
+```
+DefaultGameService
+```java
+package com.jikim.designpatterns._02_structural_patterns._12_proxy.after_v2;
+
+public class DefaultGameService implements GameService {
+
+	@Override
+	public void startGame() {
+		System.out.println("이 자리에 오신 여러분을 진심으로 환영합니다.");
+	}
+}
+```
+GameServiceProxy
+```java
+package com.jikim.designpatterns._02_structural_patterns._12_proxy.after_v2;
+
+public class GameServiceProxy implements GameService {
+
+	private GameService gameService;
+
+	@Override
+	public void startGame() {
+		long before = System.currentTimeMillis();
+		if (gameService == null) {
+			this.gameService = new DefaultGameService();
+		}
+		gameService.startGame();
+		System.out.println(System.currentTimeMillis() - before);
+	}
+}
+```
+Client
+```java
+package com.jikim.designpatterns._02_structural_patterns._12_proxy.after_v2;
+
+public class Client {
+	public static void main(String[] args) {
+		GameService gameService = new GameServiceProxy();
+		gameService.startGame();
+	}
+}
+```
