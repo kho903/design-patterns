@@ -77,3 +77,120 @@ public class Client {
 }
 ```
 - Client에서 직접 RequestHandler, AuthRequestHandler, LoggingRequestHandler 골라주어야 한다.
+
+## 적용 후
+Request
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._13_chain_of_responsibilities.after;
+
+public class Request {
+
+	private String body;
+
+	public Request(String body) {
+		this.body = body;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+}
+```
+RequestHandler - abstract class
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._13_chain_of_responsibilities.after;
+
+public abstract class RequestHandler {
+
+	private RequestHandler nextHandler;
+
+	public RequestHandler(RequestHandler nextHandler) {
+		this.nextHandler = nextHandler;
+	}
+
+	public void handle(Request request) {
+		if (nextHandler != null) {
+			nextHandler.handle(request);
+		}
+	}
+}
+```
+AuthRequestHandler
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._13_chain_of_responsibilities.after;
+
+public class AuthRequestHandler extends RequestHandler {
+
+	public AuthRequestHandler(RequestHandler nextHandler) {
+		super(nextHandler);
+	}
+
+	@Override
+	public void handle(Request request) {
+		System.out.println("인증이 되었는가?");
+		super.handle(request);
+	}
+}
+```
+LoggingRequestHandler
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._13_chain_of_responsibilities.after;
+
+public class LoggingRequestHandler extends RequestHandler {
+
+	public LoggingRequestHandler(RequestHandler nextHandler) {
+		super(nextHandler);
+	}
+
+	@Override
+	public void handle(Request request) {
+		System.out.println("로깅");
+		super.handle(request);
+	}
+}
+```
+PrintRequestHandler
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._13_chain_of_responsibilities.after;
+
+public class PrintRequestHandler extends RequestHandler {
+
+	public PrintRequestHandler(RequestHandler nextHandler) {
+		super(nextHandler);
+	}
+
+	@Override
+	public void handle(Request request) {
+		System.out.println(request.getBody());
+		super.handle(request);
+	}
+}
+```
+Client
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._13_chain_of_responsibilities.after;
+
+public class Client {
+
+	private RequestHandler requestHandler;
+
+	public Client(RequestHandler requestHandler) {
+		this.requestHandler = requestHandler;
+	}
+
+	public void doWork() {
+		Request request = new Request("이번 놀이는 뽑기입니다.");
+		requestHandler.handle(request);
+	}
+
+	public static void main(String[] args) {
+		RequestHandler chain = new AuthRequestHandler(new LoggingRequestHandler(new PrintRequestHandler(null)));
+		Client client = new Client(chain);
+		client.doWork();
+	}
+}
+```
