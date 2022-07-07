@@ -130,3 +130,9 @@ public class Client {
 
 ### 단점
 - 코드의 복잡도가 증가한다.
+
+## 자바와 스프링에서 찾아보는 패턴
+### 자바
+- 다이나믹 프록시, java.lang.reflect.Proxy
+### 스프링
+- 스프링 AOP
