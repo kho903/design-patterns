@@ -18,6 +18,8 @@ public class PostfixParser {
 		switch (c) {
 			case '+':
 				return plus(stack.pop(), stack.pop());
+			case '*':
+				return new MultiplyExpression(stack.pop(), stack.pop());
 			case '-':
 				PostfixExpression right = stack.pop();
 				PostfixExpression left = stack.pop();
