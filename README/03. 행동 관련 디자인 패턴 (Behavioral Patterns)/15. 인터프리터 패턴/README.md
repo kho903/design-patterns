@@ -242,3 +242,12 @@ public class App {
 
 ### 단점
 - 복잡한 문법을 표현하려면 Expression과 Parser가 복잡해진다.
+
+## 자바와 스프링에서 찾아보는 패턴
+### 자바
+- 자바 컴파일러
+- 정규 표현식
+
+### 스프링
+- SpEL (스프링 Expression Language)
+
