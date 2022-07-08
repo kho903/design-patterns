@@ -106,3 +106,132 @@ public class MyApp {
 	}
 }
 ```
+
+## 적용 후
+Game, Light 그대로
+
+Command interface
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._14_command.after;
+
+public interface Command {
+
+	void execute();
+}
+```
+LightOnCommand
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._14_command.after;
+
+public class LightOnCommand implements Command {
+
+	private Light light;
+
+	public LightOnCommand(Light light) {
+		this.light = light;
+	}
+
+	@Override
+	public void execute() {
+		light.on();
+	}
+}
+```
+LightOffCommand
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._14_command.after;
+
+public class LightOffCommand implements Command {
+
+	private Light light;
+
+	public LightOffCommand(Light light) {
+		this.light = light;
+	}
+
+	@Override
+	public void execute() {
+		light.off();
+	}
+}
+```
+GameStartCommand
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._14_command.after;
+
+public class GameStartCommand implements Command {
+
+	private Game game;
+
+	public GameStartCommand(Game game) {
+		this.game = game;
+	}
+
+	@Override
+	public void execute() {
+		game.start();
+	}
+}
+```
+GameEndCommand
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._14_command.after;
+
+public class GameEndCommand implements Command {
+
+	private Game game;
+
+	public GameEndCommand(Game game) {
+		this.game = game;
+	}
+
+	@Override
+	public void execute() {
+		game.end();
+	}
+}
+```
+Button
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._14_command.after;
+
+public class Button {
+
+	private Command command;
+
+	public Button(Command command) {
+		this.command = command;
+	}
+
+	public void press() {
+		command.execute();
+	}
+
+	public static void main(String[] args) {
+		Button button = new Button(new LightOnCommand(new Light()));
+		button.press();
+	}
+}
+```
+MyApp
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._14_command.after;
+
+public class MyApp {
+
+	private Command command;
+
+	public MyApp(Command command) {
+		this.command = command;
+	}
+
+	public void press() {
+		command.execute();
+	}
+
+	public static void main(String[] args) {
+		MyApp myApp = new MyApp(new GameStartCommand(new Game()));
+		myApp.press();
+	}
+}
+```
