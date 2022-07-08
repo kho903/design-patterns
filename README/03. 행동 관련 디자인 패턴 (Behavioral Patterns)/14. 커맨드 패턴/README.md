@@ -246,3 +246,13 @@ public class MyApp {
 
 ### 단점
 - 코드가 복잡하고 클래스가 많아진다.
+
+## 자바와 스프링에서 찾아보는 패턴
+### 자바
+- Runnable
+- 람다
+- 메소드 레퍼런스
+
+### 스프링
+- SimpleJdbcInsert
+- SimpleJdbcCall
