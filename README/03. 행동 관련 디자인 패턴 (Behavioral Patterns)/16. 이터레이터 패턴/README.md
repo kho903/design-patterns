@@ -216,3 +216,13 @@ public class Client {
 
 ### 단점
 - 클래스가 늘어나고 복잡도가 증가한다.
+
+## 자바와 스프링에서 찾아보는 패턴
+### 자바
+- java.util.Enumeration 과 java.util.Iterator
+- Java StAX (Streaming Api for XML)의 iterator 기반 API
+  - XmlEventReader, XmlEventWriter
+
+### 스프링
+- CompositeIterator
+s
