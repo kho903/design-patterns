@@ -1,6 +1,8 @@
 package com.jikim.designpatterns._03_behavioral_patterns._18_memento.after;
 
-public class Game {
+import java.io.Serializable;
+
+public class Game implements Serializable {
 
 	private int redTeamScore;
 	private int blueTeamScore;

@@ -141,3 +141,7 @@ public class Client {
 
 ### 단점
 - 많은 정보를 저장하는 Mementor를 자주 생성하는 경우 메모리 사용량에 많은 영향을 줄 수 있다.
+
+## 자바에서 찾아보는 패턴
+- 객체 직렬화, java.io.Serializable
+- java.util.Date
