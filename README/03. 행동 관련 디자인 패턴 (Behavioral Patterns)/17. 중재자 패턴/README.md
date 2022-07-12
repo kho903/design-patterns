@@ -185,3 +185,11 @@ public class Guest {
 
 ### 단점
 - 중재자 역할을 하는 클래스의 복잡도와 결합도가 증가한다.
+
+## 자바와 스프링에서 찾아보는 패턴
+### 자바
+- ExecutorService
+- Executor
+
+### 스프링
+- DispatcherServlet
