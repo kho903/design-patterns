@@ -87,3 +87,93 @@ public class Hotel {
 	}
 }
 ```
+
+## 적용 후
+CleaningService
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._17_mediator.after;
+
+public class CleaningService {
+
+	private FrontDesk frontDesk = new FrontDesk();
+
+	public void getTowers(Integer guestId, int numberOfTowers) {
+		String roomNumber = this.frontDesk.getRoomNumberFor(guestId);
+		System.out.println("provide " + numberOfTowers + " to " + roomNumber);
+	}
+}
+```
+Restaurant
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._17_mediator.after;
+
+import java.time.LocalDateTime;
+
+public class Restaurant {
+	public void dinner(Integer id, LocalDateTime dateTime) {
+		System.out.println("#" + id + " dinner in" + dateTime);
+	}
+}
+```
+FrontDesk
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._17_mediator.after;
+
+import java.time.LocalDateTime;
+
+public class FrontDesk {
+
+	private CleaningService cleaningService = new CleaningService();
+
+	private Restaurant restaurant = new Restaurant();
+
+	public void getTowers(Guest guest, int numberOfTowers) {
+		cleaningService.getTowers(guest.getId(), numberOfTowers);
+	}
+
+	public String getRoomNumberFor(Integer guestId) {
+		return "#" + guestId;
+	}
+
+	public void dinner(Guest guest, LocalDateTime dateTime) {
+		restaurant.dinner(guest.getId(), dateTime);
+	}
+}
+```
+Guest
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._17_mediator.after;
+
+import java.time.LocalDateTime;
+
+public class Guest {
+
+	private Integer id;
+
+	private FrontDesk frontDesk = new FrontDesk();
+
+	public void getTowers(int numberOfTowers) {
+		this.frontDesk.getTowers(this, numberOfTowers);
+	}
+
+	public void dinner(LocalDateTime dateTime) {
+		this.frontDesk.dinner(this, dateTime);
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public FrontDesk getFrontDesk() {
+		return frontDesk;
+	}
+
+	public void setFrontDesk(FrontDesk frontDesk) {
+		this.frontDesk = frontDesk;
+	}
+}
+```
