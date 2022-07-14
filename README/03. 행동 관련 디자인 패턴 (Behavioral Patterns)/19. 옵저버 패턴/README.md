@@ -78,3 +78,92 @@ public class Client {
 	}
 }
 ```
+
+## 적용 후
+Subscriber
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._19_observer.after;
+
+public interface Subscriber {
+	void handleMessage(String message);
+}
+```
+User
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._19_observer.after;
+
+public class User implements Subscriber {
+
+	private String name;
+
+	public User(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void handleMessage(String message) {
+		System.out.println(message);
+	}
+}
+```
+CharServer
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._19_observer.after;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class ChatServer {
+
+	private Map<String, List<Subscriber>> subscribers = new HashMap<>();
+
+	public void register(String subject, Subscriber subscriber) {
+		if (this.subscribers.containsKey(subject)) {
+			this.subscribers.get(subject).add(subscriber);
+		} else {
+			List<Subscriber> list = new ArrayList<>();
+			list.add(subscriber);
+			this.subscribers.put(subject, list);
+		}
+	}
+
+	public void unregister(String subject, Subscriber subscriber) {
+		if (this.subscribers.containsKey(subject)) {
+			this.subscribers.get(subject).remove(subscriber);
+		}
+	}
+
+	public void sendMessage(User user, String subject, String message) {
+		if (this.subscribers.containsKey(subject)) {
+			String userMessage = user.getName() + ": " + message;
+			this.subscribers.get(subject).forEach(s -> s.handleMessage(userMessage));
+		}
+	}
+}
+```
+Client
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._19_observer.after;
+
+public class Client {
+	public static void main(String[] args) {
+		ChatServer chatServer = new ChatServer();
+		User user1 = new User("KIM");
+		User user2 = new User("LEE");
+
+		chatServer.register("오징어 게임", user1);
+		chatServer.register("오징어 게임", user2);
+
+		chatServer.register("디자인 패턴", user1);
+
+		chatServer.sendMessage(user1, "오징어 게임", "안녕하세요.");
+		chatServer.sendMessage(user2, "디자인 패턴", "옵저버 패턴임");
+	}
+}
+```
