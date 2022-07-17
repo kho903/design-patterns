@@ -13,5 +13,8 @@ public class Client {
 
 		chatServer.sendMessage(user1, "오징어 게임", "안녕하세요.");
 		chatServer.sendMessage(user2, "디자인 패턴", "옵저버 패턴임");
-	}
+
+		chatServer.unregister("디자인 패턴", user2);
+
+		chatServer.sendMessage(user2, "디자인 패턴", "옵저버 패턴");	}
 }
