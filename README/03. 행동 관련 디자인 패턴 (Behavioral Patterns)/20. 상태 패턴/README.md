@@ -126,3 +126,195 @@ public class Client {
 	}
 }
 ```
+
+## 적용 후
+State
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._20_state.after;
+
+public interface State {
+
+	void addReview(String review, Student student);
+
+	void addStudent(Student student);
+}
+```
+Draft
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._20_state.after;
+
+public class Draft implements State {
+
+	private OnlineCourse onlineCourse;
+
+	public Draft(OnlineCourse onlineCourse) {
+		this.onlineCourse = onlineCourse;
+	}
+
+	@Override
+	public void addReview(String review, Student student) {
+		throw new UnsupportedOperationException("드래프트 상태에서는 리뷰를 남길 수 없습니다.");
+	}
+
+	@Override
+	public void addStudent(Student student) {
+		this.onlineCourse.getStudents().add(student);
+		if (this.onlineCourse.getStudents().size() > 1) {
+			this.onlineCourse.changeState(new Private(this.onlineCourse));
+		}
+	}
+}
+```
+Private
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._20_state.after;
+
+public class Private implements State {
+
+	private OnlineCourse onlineCourse;
+
+	public Private(OnlineCourse onlineCourse) {
+		this.onlineCourse = onlineCourse;
+	}
+
+	@Override
+	public void addReview(String review, Student student) {
+		if (this.onlineCourse.getStudents().contains(student)) {
+			this.onlineCourse.getReviews().add(review);
+		} else {
+			throw new UnsupportedOperationException("프라이빗 코스는 수강하는 학생만 리뷰를 남길 수 있습니다.");
+		}
+	}
+
+	@Override
+	public void addStudent(Student student) {
+		if (student.isAvailable(this.onlineCourse)) {
+			this.onlineCourse.getStudents().add(student);
+		} else {
+			throw new UnsupportedOperationException("프라이빗 코스를 수강할 수 없습니다.");
+		}
+	}
+}
+```
+Published
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._20_state.after;
+
+public class Published implements State {
+
+	private OnlineCourse onlineCourse;
+
+	public Published(OnlineCourse onlineCourse) {
+		this.onlineCourse = onlineCourse;
+	}
+
+	@Override
+	public void addReview(String review, Student student) {
+		this.onlineCourse.getReviews().add(review);
+	}
+
+	@Override
+	public void addStudent(Student student) {
+		this.onlineCourse.getStudents().add(student);
+	}
+}
+```
+OnlineCourse
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._20_state.after;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class OnlineCourse {
+
+	private State state = new Draft(this);
+
+	private List<Student> students = new ArrayList<>();
+
+	private List<String> reviews = new ArrayList<>();
+
+	public void addStudent(Student student) {
+		this.state.addStudent(student);
+	}
+
+	public void addReview(String review, Student student) {
+		this.state.addReview(review, student);
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public List<Student> getStudents() {
+		return students;
+	}
+
+	public List<String> getReviews() {
+		return reviews;
+	}
+
+	public void changeState(State state) {
+		this.state = state;
+	}
+}
+
+```
+Student
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._20_state.after;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class Student {
+	private String name;
+
+	public Student(String name) {
+		this.name = name;
+	}
+
+	private Set<OnlineCourse>  onlineCourses = new HashSet<>();
+
+	public boolean isAvailable(OnlineCourse onlineCourse) {
+		return onlineCourses.contains(onlineCourse);
+	}
+
+	public void addPrivate(OnlineCourse onlineCourse) {
+		this.onlineCourses.add(onlineCourse);
+	}
+
+	@Override
+	public String toString() {
+		return "Student{" +
+			"name='" + name + '\'' +
+			'}';
+	}
+}
+```
+Client
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._20_state.after;
+
+public class Client {
+
+	public static void main(String[] args) {
+		OnlineCourse onlineCourse = new OnlineCourse();
+		Student student = new Student("kim");
+		Student jikim = new Student("jikim");
+		jikim.addPrivate(onlineCourse);
+
+		onlineCourse.addStudent(student);
+
+		onlineCourse.changeState(new Private(onlineCourse));
+
+		onlineCourse.addReview("hello", student);
+
+		onlineCourse.addStudent(jikim);
+
+		System.out.println(onlineCourse.getState());
+		System.out.println(onlineCourse.getReviews());
+		System.out.println(onlineCourse.getStudents());
+	}
+}
+```
