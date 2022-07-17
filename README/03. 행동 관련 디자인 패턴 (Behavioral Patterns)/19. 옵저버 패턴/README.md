@@ -178,3 +178,11 @@ public class Client {
 - 복잡도가 증가한다.
 - 디수의 Observer 객체를 등록 이후 해지 않는다면 memory leak이 발생할 수도 있다.
     - Weak Reference 방법 또는 사용하지 않는 요소는 unregister하는 방법으로 해결
+
+## 자바와 스프링에서 찾아보는 패턴
+### 자바
+- Observable과 Observer (자바 9부터 deprecated)
+- 자바9 이후부터는
+  - PropertyChangeListener, PropertyChangeEvent
+  - Flow API
+- SAX (Simple API for XML) 라이브러리
