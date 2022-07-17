@@ -186,3 +186,6 @@ public class Client {
   - PropertyChangeListener, PropertyChangeEvent
   - Flow API
 - SAX (Simple API for XML) 라이브러리
+
+### 스프링
+- ApplicationContext와 ApplicationEvent
