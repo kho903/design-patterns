@@ -146,3 +146,11 @@ public class Client {
 ### 단점
 - 복잡도가 증가한다.
 - 클라이언트 코드가 구체적인 전략을 알아야 한다.
+
+## 자바와 스프링에서 찾아보는 패턴
+### 자바
+- Comparator
+### 스프링
+- ApplicationContext
+- PlatformTransactionManager
+- ...
