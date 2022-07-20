@@ -11,7 +11,7 @@ public abstract class FileProcessor {
 		this.path = path;
 	}
 
-	public int process() {
+	public final int process() {
 		try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
 			int result = 0;
 			String line = null;
