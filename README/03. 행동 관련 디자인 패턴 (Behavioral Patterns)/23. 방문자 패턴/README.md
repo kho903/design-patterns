@@ -236,3 +236,12 @@ public class Client {
 ### 단점
 - 복잡하다.
 - 새로운 Element를 추가하거나 제거할 때 모든 Visitor 코드를 변경해야 한다.
+
+## 자바와 스프링에서 찾아보는 패턴
+### 자바
+- FileVisitor, SimpleFileVisitor
+- AnnotationValueVisitor
+- ElementVisitor
+
+### 스프링
+- BeanDefinitionVisitor
