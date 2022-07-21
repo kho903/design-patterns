@@ -239,3 +239,13 @@ public class Plus implements Operator {
   - 리스코프 치환 원칙 : 상속 구조에서 상위 클래스 타입으로 사용하는 코드에서 그 코드를 하위 타입으로 
   치환해도 정상적으로 동작해야 한다.
 - 알고리듬 구조가 복잡할 수록 템플릿을 유지하기 어려워진다.
+
+## 자바와 스프링에서 찾아보는 패턴
+### 자바
+- HttpServlet
+### 스프링
+- 템플릿 메소드 패턴
+  - Configuration
+- 템플릿 콜백 패턴
+  - JdbcTemplate
+  - RestTemplate
