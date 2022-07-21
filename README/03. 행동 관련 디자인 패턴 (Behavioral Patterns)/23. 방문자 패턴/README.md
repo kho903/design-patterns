@@ -92,3 +92,138 @@ public class Client {
 	}
 }
 ```
+
+## 적용 후
+Device
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._23_visitor.after;
+
+public interface Device {
+	void print(Circle circle);
+
+	void print(Triangle triangle);
+
+	void print(Rectangle rectangle);
+
+}
+```
+Phone
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._23_visitor.after;
+
+public class Phone implements Device {
+	@Override
+	public void print(Circle circle) {
+		System.out.println("Print Circle to Phone");
+	}
+
+	@Override
+	public void print(Triangle triangle) {
+		System.out.println("Print Triangle to Phone");
+	}
+
+	@Override
+	public void print(Rectangle rectangle) {
+		System.out.println("Print Rectangle to Phone");
+	}
+}
+```
+Watch
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._23_visitor.after;
+
+public class Watch implements Device {
+	@Override
+	public void print(Circle circle) {
+		System.out.println("Print Circle to Watch");
+	}
+
+	@Override
+	public void print(Triangle triangle) {
+		System.out.println("Print Triangle to Watch");
+	}
+
+	@Override
+	public void print(Rectangle rectangle) {
+		System.out.println("Print Rectangle to Watch");
+	}
+}
+```
+Pad
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._23_visitor.after;
+
+public class Pad implements Device {
+
+	@Override
+	public void print(Circle circle) {
+		System.out.println("Print Circle to Pad");
+	}
+
+	@Override
+	public void print(Triangle triangle) {
+		System.out.println("Print Triangle to Pad");
+	}
+
+	@Override
+	public void print(Rectangle rectangle) {
+		System.out.println("Print Rectangle to Pad");
+	}
+}
+```
+Shape
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._23_visitor.after;
+
+public interface Shape {
+
+	void accept(Device device);
+}
+```
+Circle
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._23_visitor.after;
+
+public class Circle implements Shape {
+
+	@Override
+	public void accept(Device device) {
+		device.print(this);
+	}
+}
+```
+Rectangle
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._23_visitor.after;
+
+public class Rectangle implements Shape {
+	@Override
+	public void accept(Device device) {
+		device.print(this);
+	}
+}
+```
+Triangle
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._23_visitor.after;
+
+public class Triangle implements Shape {
+	@Override
+	public void accept(Device device) {
+		device.print(this);
+	}
+}
+```
+Client
+```java
+package com.jikim.designpatterns._03_behavioral_patterns._23_visitor.after;
+
+public class Client {
+	public static void main(String[] args) {
+		Shape rectangle = new Rectangle();
+		// Device device = new Phone();
+		Device device = new Pad();
+		rectangle.accept(device);
+	}
+}
+```
